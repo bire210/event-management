@@ -1,3 +1,4 @@
+const { dateToString } = require("../../helper/utils");
 const { bookingModel } = require("../../models/booking");
 const { eventModel } = require("../../models/eventModel");
 const { userModel } = require("../../models/userModel");
@@ -6,7 +7,21 @@ const tranformEvent = (event) => {
   return {
     ...event._doc,
     _id: event.id,
-    date: new Date(event._doc.date).toISOString(),
+    date: dateToString(event._doc.date),
+  };
+};
+
+const tranformBookedEvent = (result) => {
+  return {
+    // ...booking._doc,
+    // _id: booking.id,
+    // createdAt: dateToString(booking._doc.createdAt),
+    // updatedAt: dateToString(booking._doc.updatedAt),
+    ...result._doc,
+    _id: result.id,
+    event: { ...tranformEvent(result._doc.event) },
+    createdAt: dateToString(result._doc.createdAt),
+    updatedAt: dateToString(result._doc.updatedAt),
   };
 };
 
@@ -44,14 +59,8 @@ const rootValue = {
             select: "email",
           },
         });
-      console.log("bookinglist  ***", bookings);
       bookings = bookings.map((booking) => {
-        return {
-          ...booking._doc,
-          _id: booking.id,
-          createdAt: new Date(booking._doc.createdAt).toDateString(),
-          updatedAt: new Date(booking._doc.updatedAt).toDateString(),
-        };
+        return tranformBookedEvent(booking);
       });
       return bookings;
     } catch (error) {
@@ -109,13 +118,30 @@ const rootValue = {
       });
 
       const result = await booking.save();
-      return {
-        ...result._doc,
-        _id: result.id,
-        createdAt: new Date(result._doc.createdAt).toDateString(),
-        updatedAt: new Date(result._doc.updatedAt).toDateString(),
-      };
+      return tranformBookedEvent(result);
     } catch (error) {}
+  },
+
+  cancelBooking: async ({ bookingId }) => {
+    try {
+      const booking = await bookingModel
+        .findById({ _id: bookingId })
+        .populate("user")
+        .populate({
+          path: "event",
+          populate: {
+            path: "creator",
+          },
+        });
+      if (!booking) {
+        throw new Error("Event not Found");
+      }
+
+      await bookingModel.findByIdAndDelete(bookingId);
+      return tranformEvent(booking.event);
+    } catch (error) {
+      throw new Error(error.message);
+    }
   },
   createUser: async ({ user }) => {
     try {

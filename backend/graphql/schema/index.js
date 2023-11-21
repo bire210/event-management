@@ -16,6 +16,14 @@ type User {
   token:String
   createdEvent:[Event]
 }
+
+type Booking{
+  _id:ID!
+  event:Event!
+  user:User!
+  createdAt:String!
+  updatedAt:String!
+}
 input UserInput{
    email:String!
   password:String!
@@ -29,6 +37,7 @@ input EventInput {
 }
   type Query {
     events: [Event!]!
+    bookings:[Booking!]!
     eventById(id: ID!): Event
     login(user:UserInput):User
     getEvents(id:ID!):[Event]
@@ -39,8 +48,9 @@ input EventInput {
     updateEventById(id: ID!, event: EventInput): Event
     deleteEventById(id: ID!): Event
     createUser(user:UserInput):User
-    
+    bookEvent(eventId:ID!):Booking!
+    cancelBooking(bookingId:ID!):Event!
   }
 `);
 
-module.exports={schema}
+module.exports = { schema };

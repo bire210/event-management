@@ -1,3 +1,4 @@
+const { bookingModel } = require("../../models/booking");
 const { eventModel } = require("../../models/eventModel");
 const { userModel } = require("../../models/userModel");
 
@@ -17,6 +18,42 @@ const rootValue = {
         return tranformEvent(event);
       });
       return allEvent;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
+
+  bookings: async () => {
+    try {
+      let bookings = await bookingModel
+        .find()
+        .populate({
+          path: "user",
+          populate: {
+            path: "createdEvent",
+            populate: {
+              path: "creator",
+              select: "email password",
+            },
+          },
+        })
+        .populate({
+          path: "event",
+          populate: {
+            path: "creator",
+            select: "email",
+          },
+        });
+      console.log("bookinglist  ***", bookings);
+      bookings = bookings.map((booking) => {
+        return {
+          ...booking._doc,
+          _id: booking.id,
+          createdAt: new Date(booking._doc.createdAt).toDateString(),
+          updatedAt: new Date(booking._doc.updatedAt).toDateString(),
+        };
+      });
+      return bookings;
     } catch (error) {
       throw new Error(error.message);
     }
@@ -61,6 +98,24 @@ const rootValue = {
     } catch (error) {
       throw new Error(error.message);
     }
+  },
+
+  bookEvent: async ({ eventId }) => {
+    try {
+      let fetchEvent = await eventModel.findOne({ _id: eventId });
+      const booking = new bookingModel({
+        user: "655c3a7008b2d892ca8e3bb4",
+        event: fetchEvent,
+      });
+
+      const result = await booking.save();
+      return {
+        ...result._doc,
+        _id: result.id,
+        createdAt: new Date(result._doc.createdAt).toDateString(),
+        updatedAt: new Date(result._doc.updatedAt).toDateString(),
+      };
+    } catch (error) {}
   },
   createUser: async ({ user }) => {
     try {

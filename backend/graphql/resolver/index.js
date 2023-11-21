@@ -1,10 +1,21 @@
 const { eventModel } = require("../../models/eventModel");
 const { userModel } = require("../../models/userModel");
 
+const tranformEvent = (event) => {
+  return {
+    ...event._doc,
+    _id: event.id,
+    date: new Date(event._doc.date).toISOString(),
+  };
+};
+
 const rootValue = {
   events: async () => {
     try {
-      const allEvent = await eventModel.find().populate("creator");
+      let allEvent = await eventModel.find().populate("creator");
+      allEvent = allEvent.map((event) => {
+        return tranformEvent(event);
+      });
       return allEvent;
     } catch (error) {
       throw new Error(error.message);
@@ -12,10 +23,13 @@ const rootValue = {
   },
   getEvents: async ({ id }) => {
     try {
-      const eventslist = await eventModel
+      let eventslist = await eventModel
         .find({ creator: id })
         .populate("creator");
 
+      eventslist = eventslist.map((event) => {
+        return tranformEvent(event);
+      });
       return eventslist;
     } catch (error) {
       throw new Error(error.message);
@@ -24,7 +38,7 @@ const rootValue = {
   eventById: async ({ id }) => {
     try {
       const event = await eventModel.findById(id).populate("creator");
-      return event;
+      return tranformEvent(event);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -35,15 +49,15 @@ const rootValue = {
       desc: event.desc,
       price: event.price,
       date: new Date(event.date),
-      creator: "655b753a079fb07318589a1d",
+      creator: "655c3a7008b2d892ca8e3bb4",
     });
     try {
       const result = await newEvent.save();
       await result.populate("creator");
-      const user = await userModel.findById("655b753a079fb07318589a1d");
+      const user = await userModel.findById("655c3a7008b2d892ca8e3bb4");
       user.createdEvent.push(result);
       user.save();
-      return { ...result._doc, _id: result.id };
+      return tranformEvent(result);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -103,7 +117,7 @@ const rootValue = {
         },
         { new: true }
       );
-      return updatedEvent;
+      return tranformEvent(updatedEvent);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -111,7 +125,7 @@ const rootValue = {
   deleteEventById: async ({ id }) => {
     try {
       const deletedEvent = await eventModel.findByIdAndDelete(id);
-      return deletedEvent;
+      return tranformEvent(deletedEvent);
     } catch (error) {
       throw new Error(error.message);
     }

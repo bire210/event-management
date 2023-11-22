@@ -4,8 +4,8 @@ require('dotenv').config();
 const connection=mongoose.connect(process.env.mongoUrl)
 
 
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, "birendra", {
+const generateToken = (userId,email) => {
+  return jwt.sign({ userId ,email}, "birendra", {
     expiresIn: "1h",
   });
 };

@@ -6,9 +6,10 @@ const { connection} = require("./config/connetDb");
 
 const { schema } = require("./graphql/schema");
 const { rootValue } = require("./graphql/resolver");
+const { authMiddleware } = require("./middleware/isAuth");
 const app = express();
 app.use(express.json());
-
+app.use(authMiddleware);
 
 app.use(
   "/graphql",

@@ -23,8 +23,11 @@ const eventResolver = {
     }
   },
 
-  getEvents: async ({ id }) => {
+  getEvents: async ({ id }, req) => {
     try {
+      if (!req.isAuth) {
+        throw new Error("Unauthenticated !");
+      }
       let eventslist = await eventModel
         .find({ creator: id })
         .populate("creator");
@@ -37,27 +40,33 @@ const eventResolver = {
       throw new Error(error.message);
     }
   },
-  eventById: async ({ id }) => {
+  eventById: async ({ id }, req) => {
     try {
+      if (!req.isAuth) {
+        throw new Error("Unauthenticated !");
+      }
       const event = await eventModel.findById(id).populate("creator");
       return tranformEvent(event);
     } catch (error) {
       throw new Error(error.message);
     }
   },
-  createEvent: async ({ event }) => {
+  createEvent: async ({ event }, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated !");
+    }
     const newEvent = new eventModel({
       title: event.title,
       desc: event.desc,
       price: event.price,
       date: new Date(event.date),
-      creator: "655c3a7008b2d892ca8e3bb4",
+      creator: req.user.userId,
     });
     try {
       const result = await newEvent.save();
       await result.populate("creator");
-      const user = await userModel.findById("655c3a7008b2d892ca8e3bb4");
-      user.createdEvent.push(result);
+      const user = await userModel.findById(req.user.userId);
+      user.createdEvent.push(result.id);
       user.save();
       return tranformEvent(result);
     } catch (error) {
@@ -65,8 +74,11 @@ const eventResolver = {
     }
   },
 
-  updateEventById: async ({ id, event }) => {
+  updateEventById: async ({ id, event }, req) => {
     try {
+      if (!req.isAuth) {
+        throw new Error("Unauthenticated !");
+      }
       const updatedEvent = await eventModel.findByIdAndUpdate(
         id,
         {
@@ -82,8 +94,11 @@ const eventResolver = {
       throw new Error(error.message);
     }
   },
-  deleteEventById: async ({ id }) => {
+  deleteEventById: async ({ id }, req) => {
     try {
+      if (!req.isAuth) {
+        throw new Error("Unauthenticated !");
+      }
       const deletedEvent = await eventModel
         .findByIdAndDelete(id)
         .populate("creator");

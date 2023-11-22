@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
-const Booking = () => {
+const Home = () => {
   return (
     <div className="flex text-center h-screen justify-center items-center bg-slate-400">
-      Booking
+      Easy events
     </div>
   );
-}
+};
 
-export default Booking
+export default Home;

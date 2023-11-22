@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
 
 const Events = () => {
   return (
-    <div>Events</div>
-  )
-}
+    <div className="flex text-center h-screen justify-center items-center bg-slate-400">
+      Events
+    </div>
+  );
+};
 
-export default Events
+export default Events;

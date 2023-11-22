@@ -1,13 +1,14 @@
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
 const bcrypt = require("bcrypt");
-
-const { connection} = require("./config/connetDb");
+const cors = require("cors");
+const { connection } = require("./config/connetDb");
 
 const { schema } = require("./graphql/schema");
 const { rootValue } = require("./graphql/resolver");
 const { authMiddleware } = require("./middleware/isAuth");
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(authMiddleware);
 

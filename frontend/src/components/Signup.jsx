@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import { ContextState } from "../context/Context";
 const SignUp = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [name, setName] = useState();
@@ -10,7 +11,7 @@ const SignUp = () => {
   const [password, setPssword] = useState();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const { user } = ContextState();
   const toggleVisibility = () =>
     setIsPasswordVisible((prevState) => !prevState);
 

@@ -5,7 +5,6 @@ import Booking from "./pages/Booking";
 import NotFound from "./pages/NotFound";
 import NavigationBar from "./components/NavigationBar";
 import Home from "./pages/Home";
-import { useEffect } from "react";
 import Private from "./context/Private";
 function App() {
   return (

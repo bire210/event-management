@@ -20,6 +20,14 @@ const authResolver = {
       throw new Error(error.message);
     }
   },
+  getUserById: async ({ id }) => {
+    try {
+      const result = await userModel.findById(id);
+      return result;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
 
   login: async ({ user }) => {
     try {

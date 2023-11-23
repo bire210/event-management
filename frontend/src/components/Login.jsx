@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { ContextState } from "../context/Context";
@@ -10,7 +10,7 @@ const Login = () => {
   const [password, setPssword] = useState();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-const { user } = ContextState();
+  const { setUser } = ContextState();
   const toggleVisibility = () =>
     setIsPasswordVisible((prevState) => !prevState);
   const submitHandler = async () => {
@@ -46,6 +46,7 @@ const { user } = ContextState();
   }){
     _id
     token
+    email
   }
 }
         `,
@@ -55,19 +56,28 @@ const { user } = ContextState();
         reqBody,
         config
       );
-      console.log(data);
-      toast.success("LoginSuccessful", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
 
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      console.log("user data after login ********", data?.data?.login);
+      if (data) {
+        setUser(data?.data?.login);
+        // window.location.reload();
+        toast.success("LoginSuccessful", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        // setTimeout(() => {
+        //   navigate("/");
+        // }, 1000);
+        navigate("/");
+      }
+
+      localStorage.setItem("userInfo", JSON.stringify(data?.data?.login));
       setLoading(false);
     } catch (error) {
       toast.warning(`${error}`, {

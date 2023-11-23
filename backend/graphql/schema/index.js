@@ -41,6 +41,7 @@ input EventInput {
     eventById(id: ID!): Event
     login(user:UserInput):User
     getEvents(id:ID!):[Event]
+    getUserById(id:ID!):User!
   }
 
   type Mutation {

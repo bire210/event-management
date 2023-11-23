@@ -1,7 +1,12 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ContextState } from "../context/Context";
 
 const NavigationBar = () => {
+  let U = JSON.parse(localStorage.getItem("userInfo")) || "";
+  const { user } = ContextState();
+
   return (
     <header className="fixed left-0 top-0 w-[100%] h-14 bg-blue-400 px-4 py-0 flex items-center">
       <div className="w-[20%]">
@@ -18,7 +23,11 @@ const NavigationBar = () => {
             <NavLink to="/bookings">Booking</NavLink>
           </li>
           <li className="text-yellow-500 text-3xl">
-            <NavLink to="/auth">Login</NavLink>
+            {U?.email ? (
+              U?.email || <NavLink to="/auth">Login</NavLink>
+            ) : (
+              <NavLink to="/auth">Login</NavLink>
+            )}
           </li>
         </ul>
       </nav>

@@ -13,10 +13,11 @@ export function BookModal({ el }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const handleOpen = () => {
-    setOpen(!open);
-  };
-  const user = JSON.parse(localStorage.getItem("userInfo"));
-  const confirmBook = async () => {
+      setOpen(!open);
+      console.log(el._id)
+    };
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+    const confirmBook = async () => {
     setLoading(true);
     try {
       const config = {

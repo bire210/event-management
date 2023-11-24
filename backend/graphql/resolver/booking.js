@@ -21,11 +21,11 @@ const tranformBookedEvent = (result) => {
 };
 
 const bookingResolver = {
-  bookings: async (args,req) => {
+  bookings: async (args, req) => {
     try {
-       if (!req.isAuth) {
-         throw new Error("Unauthenticated !");
-       }
+      if (!req.isAuth) {
+        throw new Error("Unauthenticated !");
+      }
       let bookings = await bookingModel
         .find()
         .populate({
@@ -45,20 +45,20 @@ const bookingResolver = {
             select: "email",
           },
         });
-      console.log("booking*************", bookings);
-      bookings = bookings.map((booking) => {
-        return tranformBookedEvent(booking);
+      bookings = bookings.filter((booking) => {
+        return booking.user && booking.event && tranformBookedEvent(booking);
       });
+      console.log("booking*************", bookings);
       return bookings;
     } catch (error) {
       throw new Error(error.message);
     }
   },
-  bookEvent: async ({ eventId },req) => {
+  bookEvent: async ({ eventId }, req) => {
     try {
-       if (!req.isAuth) {
-         throw new Error("Unauthenticated !");
-       }
+      if (!req.isAuth) {
+        throw new Error("Unauthenticated !");
+      }
       let fetchEvent = await eventModel
         .findOne({ _id: eventId })
         .populate("creator");
@@ -69,7 +69,7 @@ const bookingResolver = {
 
       const result = await booking.save();
       await result.populate("user");
-      console.log("res",result)
+      console.log("res", result);
 
       return tranformBookedEvent(result);
     } catch (error) {
@@ -77,11 +77,11 @@ const bookingResolver = {
     }
   },
 
-  cancelBooking: async ({ bookingId },req) => {
+  cancelBooking: async ({ bookingId }, req) => {
     try {
-       if (!req.isAuth) {
-         throw new Error("Unauthenticated !");
-       }
+      if (!req.isAuth) {
+        throw new Error("Unauthenticated !");
+      }
       const booking = await bookingModel
         .findById({ _id: bookingId })
         .populate("user")

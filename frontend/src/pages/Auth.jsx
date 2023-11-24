@@ -6,9 +6,6 @@ const Auth = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
   return (
     <div className="flex flex-col w-full h-screen bg-slate-300">
-      <div className="flex text-center items-center w-[80%] mx-auto justify-center h-[10%] border">
-        Chat a app
-      </div>
       <div className="flex flex-col h-screen w-[50%] mx-auto mt-3 border bg-white">
         <div className="flex h-[10%]">
           <button

@@ -8,10 +8,10 @@ import { BookModal } from "../components/modals/BookModal";
 
 const Events = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  const [event, setEvent] = useState({});
+
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log("events", events);
+ 
   const getAllEvents = async () => {
     setLoading(true);
     try {
@@ -65,8 +65,6 @@ const Events = () => {
   useEffect(() => {
     getAllEvents();
   }, []);
-
-  // console.log(user);
 
   return (
     <div className="flex flex-col">

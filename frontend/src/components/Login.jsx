@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { ContextState } from "../context/Context";
@@ -15,7 +15,7 @@ const Login = () => {
     setIsPasswordVisible((prevState) => !prevState);
   const submitHandler = async () => {
     setLoading(true);
-    console.log(email, password);
+  
     if (!email || !password) {
       toast.warning("Please Fill all the Fields", {
         position: "top-right",
@@ -56,8 +56,6 @@ const Login = () => {
         reqBody,
         config
       );
-
-      console.log("user data after login ********", data?.data?.login);
       if (data) {
         setLoading(false);
         setUser(data?.data?.login);

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Button,
   Dialog,
-  DialogHeader,
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
@@ -13,11 +12,11 @@ export function BookModal({ el }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const handleOpen = () => {
-      setOpen(!open);
-      console.log(el._id)
-    };
-    const user = JSON.parse(localStorage.getItem("userInfo"));
-    const confirmBook = async () => {
+    setOpen(!open);
+    
+  };
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const confirmBook = async () => {
     setLoading(true);
     try {
       const config = {
@@ -50,8 +49,6 @@ export function BookModal({ el }) {
         reqBody,
         config
       );
-      console.log("booked the event", data);
-
       if (!data.errors) {
         toast.success("Event has bokked Successfully", {
           position: "top-right",
@@ -117,6 +114,7 @@ export function BookModal({ el }) {
           </Button>
         </DialogFooter>
       </Dialog>
+      <ToastContainer />
     </>
   );
 }

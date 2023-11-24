@@ -1,6 +1,6 @@
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
-const bcrypt = require("bcrypt");
+
 const cors = require("cors");
 const { connection } = require("./config/connetDb");
 

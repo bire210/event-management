@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Form } from "../components/modals/form";
 import axios from "axios";
@@ -66,6 +67,7 @@ const Events = () => {
   }, []);
 
   // console.log(user);
+
   return (
     <div className="flex flex-col">
       <div className="flex justify-end px-20 fixed right-0">

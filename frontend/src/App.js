@@ -8,9 +8,11 @@ import Home from "./pages/Home";
 import Private from "./context/Private";
 function App() {
   return (
-    <>
-      <NavigationBar />
-      <div className="bg-slate-300 m-0">
+    <div className="flex flex-col h-screen">
+      <div className="h-[10vh]">
+        <NavigationBar />
+      </div>
+      <div className="bg-slate-300 m-0 h-[90vh] ">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
@@ -33,7 +35,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }
 

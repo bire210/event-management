@@ -1,22 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-import { ContextState } from "../context/Context";
-import { useNavigate } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
-const Login = () => {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [email, setEmail] = useState();
-  const [password, setPssword] = useState();
+
+export function Form({ onadd }) {
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { setUser } = ContextState();
-  const toggleVisibility = () =>
-    setIsPasswordVisible((prevState) => !prevState);
-  const submitHandler = async () => {
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [date, setDate] = useState("");
+  const [price, setPrice] = useState(0);
+  //   console.log("events in form", events);
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const submitEvent = async () => {
     setLoading(true);
-    console.log(email, password);
-    if (!email || !password) {
+    console.log(title, price, date, desc);
+    if (!title || !price || !date || !desc) {
       toast.warning("Please Fill all the Fields", {
         position: "top-right",
         autoClose: 5000,
@@ -27,28 +35,36 @@ const Login = () => {
         progress: undefined,
         theme: "light",
       });
-
+      setLoading(false);
       return;
     }
     try {
       const config = {
         headers: {
           "Content-type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
         },
       };
-
       const reqBody = {
         query: `
-       query{
-       login(user:{
-       email:"${email}",
-       password:"${password}"
-      }){
-      _id
-     token
-     email
-   }
+        mutation{
+    createEvent(event:{
+        title:"${title}",
+        price:${price},
+        desc:"${desc}",
+        date:"${date}"
+    }){
+        title
+        date
+        desc
+        price
+        creator{
+            email
+        }
+    }
 }
+
+
         `,
       };
       const { data } = await axios.post(
@@ -56,13 +72,19 @@ const Login = () => {
         reqBody,
         config
       );
-
-      console.log("user data after login ********", data?.data?.login);
-      if (data) {
-        setLoading(false);
-        setUser(data?.data?.login);
-
-        toast.success("LoginSuccessful", {
+      console.log("event is created in form--", data);
+      onadd((prev) => {
+        const update = data.data.createEvent;
+        const updateddata = [...prev,update];
+        console.log(updateddata) 
+        return updateddata;
+      });
+      if (!data.errors) {
+        setTitle("");
+        setDate("");
+        setDesc("");
+        setPrice(0);
+        toast.success("Event created Successful", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -72,13 +94,25 @@ const Login = () => {
           progress: undefined,
           theme: "light",
         });
+        handleOpen()
+      } else {
 
-        navigate("/");
+        toast.error(`${data.errors[0].message}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        handleOpen()
       }
 
-      localStorage.setItem("userInfo", JSON.stringify(data?.data?.login));
+      setLoading(false);
     } catch (error) {
-      toast.warning(`${error}`, {
+      toast.warning(error.message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -89,60 +123,65 @@ const Login = () => {
         theme: "light",
       });
       setLoading(false);
+      handleOpen()
     }
   };
-
   return (
-    <div className="w-[100%]">
-      <div className="text-center">
-        <img
-          className="w-48 mx-auto"
-          src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
-          alt="logo"
-        />
-        <h4 className="pb-1 mt-1 mb-2 text-xl font-semibold">
-          Easy Event Team
-        </h4>
-      </div>
-      <div className="w-[100%]">
-        <div className="w-[60%] mx-auto">
+    <>
+      <Button onClick={handleOpen} variant="gradient">
+        Add an event
+      </Button>
+      <Dialog open={open} handler={handleOpen}>
+        <DialogHeader>Add event form.</DialogHeader>
+        <DialogBody>
           <form className="w-full max-w-lg border border-blue-300">
             <div className="flex justify-around px-2 my-4 text-lg">
-              <span>Email </span>
+              <span>Title </span>
               <input
                 className="w-full text-center rounded outline-none focus:ring-b focus:border-blue-500 marker:focus:ring-1"
                 type="text"
-                name="email"
-                id="email"
-                placeholder="Enter your Email"
-                onChange={(e) => setEmail(e.target.value)}
+                name="title"
+                id="title"
+                value={title}
+                placeholder="Enter your Event title"
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-around px-2 my-4 text-lg">
+              <span>Price </span>
+              <input
+                className="w-full text-center rounded outline-none focus:ring-b focus:border-blue-500 marker:focus:ring-1"
+                type="text"
+                name="price"
+                id="price"
+                value={price}
+                placeholder="Rs. 1000"
+                onChange={(e) => setPrice(+e.target.value)}
+              />
+            </div>
+            <div className="flex justify-around px-2 my-4 text-lg">
+              <span>Date </span>
+              <input
+                className="w-full text-center rounded outline-none focus:ring-b focus:border-blue-500 marker:focus:ring-1"
+                type="date"
+                name="date"
+                id="date"
+                onChange={(e) => setDate(e.target.value)}
+                value={date}
               />
             </div>
 
-            <div className="flex flex-col justify-around px-2 my-4 text-lg">
-              <div className="flex justify-around my-4 text-lg text-center">
-                <span>Password</span>
-                <input
-                  className="w-full text-center rounded outline-none focus:ring-b focus:border-blue-500focus:ring-1"
-                  type={isPasswordVisible ? "text" : "password"}
-                  name="password"
-                  id="password"
-                  placeholder="*************"
-                  onChange={(e) => setPssword(e.target.value)}
-                />
-              </div>
-              <div className="flex">
-                <label className="flex items-center mt-2">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 mr-2"
-                    checked={isPasswordVisible}
-                    onChange={toggleVisibility}
-                  />
-                  <span className="text-sm text-gray-600">Show password</span>
-                </label>
-                <ToastContainer />
-              </div>
+            <div className="flex justify-around px-2 my-4 text-lg">
+              <span>Desccription </span>
+              <textarea
+                type="text"
+                name="desc"
+                id="desc"
+                value={desc}
+                className="w-[70%] h-24 px-4 py-4  text-gray-700 border rounded-lg outline-none focus:ring-b focus:border-blue-500 marker:focus:ring-1"
+                placeholder="Type about your event here..."
+                onChange={(e) => setDesc(e.target.value)}
+              ></textarea>
             </div>
 
             <div className="px-2 pt-1 pb-1 mb-2 text-center">
@@ -154,10 +193,9 @@ const Login = () => {
                     "linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)",
                 }}
                 onClick={(e) => {
-                  submitHandler();
+                  submitEvent();
                 }}
               >
-                
                 {loading ? (
                   <div
                     role="status"
@@ -182,18 +220,25 @@ const Login = () => {
                     <span class="sr-only">Loading...</span>
                   </div>
                 ) : (
-                  "Login"
+                  "Add Event"
                 )}
               </button>
-
-              {/* <!--Forgot password link--> */}
-              <a href="#!">Forgot password?</a>
+              <ToastContainer />
             </div>
           </form>
-        </div>
-      </div>
-    </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpen}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+         
+        </DialogFooter>
+      </Dialog>
+    </>
   );
-};
-
-export default Login;
+}

@@ -1,11 +1,10 @@
-
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-
+import { ContextState } from "../context/Context";
 const NavigationBar = () => {
   let U = JSON.parse(localStorage.getItem("userInfo")) || "";
-
+  const { setUser } = ContextState();
 
   return (
     <header className="fixed top-0 w-[100%] h-14 bg-blue-400 px-4 py-0 flex items-center overflow-hidden">

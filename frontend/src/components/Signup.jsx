@@ -14,7 +14,7 @@ const SignUp = () => {
 
   const submitHandler = async () => {
     setLoading(true);
-   
+
     if (!name || !email || !password) {
       toast.warning("Please Fill all the Fields", {
         position: "top-right",
@@ -40,7 +40,8 @@ const SignUp = () => {
         mutation{
         createUser(user:{
                 email:"${email}",
-                password:"${password}"
+                password:"${password}",
+                name:"${name}"
         }){
         _id
        email
@@ -53,7 +54,6 @@ const SignUp = () => {
         reqBody,
         config
       );
-      
 
       toast.success("Registration Successful", {
         position: "top-right",

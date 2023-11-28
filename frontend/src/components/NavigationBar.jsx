@@ -1,11 +1,11 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { ContextState } from "../context/Context";
+
+import React from "react";
+import { NavLink } from "react-router-dom";
+
 
 const NavigationBar = () => {
   let U = JSON.parse(localStorage.getItem("userInfo")) || "";
-  const { user } = ContextState();
+
 
   return (
     <header className="fixed top-0 w-[100%] h-14 bg-blue-400 px-4 py-0 flex items-center overflow-hidden">

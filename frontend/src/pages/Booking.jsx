@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Form } from "../components/modals/form";
+
 import axios from "axios";
 import { toast } from "react-toastify";
-import { BookModal } from "../components/modals/BookModal";
-// import { ContextState } from "../context/Context";
 
 const Booking = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const [bookedEvents, setBookedEvent] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log("bookedEvents in booking page", bookedEvents);
+ 
   const getAllBooked = async () => {
     setLoading(true);
     try {
@@ -23,6 +21,7 @@ const Booking = () => {
         query: `
        query{
   bookings{
+    _id
     user{
       email
     }
@@ -41,7 +40,7 @@ const Booking = () => {
         reqBody,
         config
       );
-      console.log("booking list", data);
+      
 
       if (data.data) {
         setBookedEvent(data.data.data.bookings);
@@ -66,7 +65,7 @@ const Booking = () => {
     getAllBooked();
   }, []);
 
-  // console.log(user);
+
 
   return (
     <div className="flex flex-col">
@@ -89,7 +88,6 @@ const Booking = () => {
               <th scope="col" className="px-6 py-3">
                 Event creator
               </th>
-             
             </tr>
           </thead>
 

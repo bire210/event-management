@@ -1,23 +1,20 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 import "react-toastify/dist/ReactToastify.css";
-import { ContextState } from "../context/Context";
 const SignUp = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPssword] = useState();
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { user } = ContextState();
   const toggleVisibility = () =>
     setIsPasswordVisible((prevState) => !prevState);
 
   const submitHandler = async () => {
     setLoading(true);
-    console.log(name, email, password);
+   
     if (!name || !email || !password) {
       toast.warning("Please Fill all the Fields", {
         position: "top-right",
@@ -56,7 +53,7 @@ const SignUp = () => {
         reqBody,
         config
       );
-      console.log(data);
+      
 
       toast.success("Registration Successful", {
         position: "top-right",

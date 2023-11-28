@@ -16,14 +16,12 @@ export function Form({ onadd }) {
   const [desc, setDesc] = useState("");
   const [date, setDate] = useState("");
   const [price, setPrice] = useState(0);
-  //   console.log("events in form", events);
   const handleOpen = () => {
     setOpen(!open);
   };
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const submitEvent = async () => {
     setLoading(true);
-    console.log(title, price, date, desc);
     if (!title || !price || !date || !desc) {
       toast.warning("Please Fill all the Fields", {
         position: "top-right",
@@ -72,11 +70,9 @@ export function Form({ onadd }) {
         reqBody,
         config
       );
-      console.log("event is created in form--", data);
       onadd((prev) => {
         const update = data.data.createEvent;
         const updateddata = [...prev,update];
-        console.log(updateddata) 
         return updateddata;
       });
       if (!data.errors) {

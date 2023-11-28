@@ -27,7 +27,7 @@ const bookingResolver = {
         throw new Error("Unauthenticated !");
       }
       let bookings = await bookingModel
-        .find()
+        .find({ user: req.user.userId })
         .populate({
           path: "user",
           populate: {
@@ -48,7 +48,7 @@ const bookingResolver = {
       bookings = bookings.filter((booking) => {
         return booking.user && booking.event && tranformBookedEvent(booking);
       });
-      console.log("booking*************", bookings);
+      // console.log("booking*************", bookings);
       return bookings;
     } catch (error) {
       throw new Error(error.message);
@@ -66,10 +66,11 @@ const bookingResolver = {
         user: req.user.userId,
         event: fetchEvent,
       });
+      // console.log("booked the event");
 
       const result = await booking.save();
       await result.populate("user");
-      console.log("res", result);
+      // console.log("res", result);
 
       return tranformBookedEvent(result);
     } catch (error) {

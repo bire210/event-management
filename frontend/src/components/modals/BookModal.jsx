@@ -13,7 +13,6 @@ export function BookModal({ el }) {
   const [loading, setLoading] = useState(false);
   const handleOpen = () => {
     setOpen(!open);
-    
   };
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const confirmBook = async () => {
@@ -96,8 +95,8 @@ export function BookModal({ el }) {
       <Button onClick={handleOpen} variant="gradient">
         Book event
       </Button>
-      <Dialog open={open} handler={handleOpen}>
-        <DialogBody className="flex items-center justify-center h-[20vh]">
+      <Dialog open={open} handler={handleOpen} className="h-[300px] w-[200px]">
+        <DialogBody className="flex items-center justify-center ">
           <h1 className="text-3xl"> Do you want to Confirm</h1>
         </DialogBody>
         <DialogFooter>

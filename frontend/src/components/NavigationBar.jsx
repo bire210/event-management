@@ -21,9 +21,9 @@ const NavigationBar = () => {
           <li className="text-yellow-500 text-3xl">
             <NavLink to="/bookings">Booking</NavLink>
           </li>
-          <li className="text-yellow-500 text-3xl">
-            {U?.email ? (
-              U?.email || <NavLink to="/auth">Login</NavLink>
+          <li className="text-yellow-500 text-3xl hover:cursor-pointer">
+            {U?.name ? (
+              U?.name || <NavLink to="/auth">Login</NavLink>
             ) : (
               <NavLink to="/auth">Login</NavLink>
             )}

@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { ContextState } from "../context/Context";
@@ -15,7 +15,7 @@ const Login = () => {
     setIsPasswordVisible((prevState) => !prevState);
   const submitHandler = async () => {
     setLoading(true);
-  
+
     if (!email || !password) {
       toast.warning("Please Fill all the Fields", {
         position: "top-right",
@@ -47,6 +47,7 @@ const Login = () => {
       _id
      token
      email
+     name
    }
 }
         `,
@@ -155,7 +156,6 @@ const Login = () => {
                   submitHandler();
                 }}
               >
-                
                 {loading ? (
                   <div
                     role="status"

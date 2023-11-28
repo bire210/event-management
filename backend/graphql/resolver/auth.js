@@ -11,7 +11,7 @@ const authResolver = {
       const newUser = new userModel({
         email: user.email,
         password: user.password,
-        name:user.name,
+        name: user.name,
         createdEvent: [],
       });
 
@@ -47,6 +47,7 @@ const authResolver = {
       return {
         _id: findUser._id,
         email: findUser.email,
+        name: findUser.name,
         token,
         password: null,
       };

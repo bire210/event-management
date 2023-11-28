@@ -12,8 +12,10 @@ type Event {
 type User {
   _id:ID!
   email:String!
+  name:String!
   password:String
   token:String
+  isAdmin:Boolean!
   createdEvent:[Event]
 }
 
@@ -27,6 +29,7 @@ type Booking{
 input UserInput{
    email:String!
   password:String!
+  name:String
 }
 
 input EventInput {

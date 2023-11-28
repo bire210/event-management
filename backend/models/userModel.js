@@ -6,10 +6,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    lowerCase:true
+  },
+  name:{
+    type:String,
+    required:true,
+    trim:true,
+    lowerCase:true
   },
   password: {
     type: String,
     required: true,
+    trim:true
+  },
+  isAdmin:{
+    type:Boolean,
+    default:false
   },
   createdEvent: [
     {

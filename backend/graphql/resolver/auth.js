@@ -11,6 +11,7 @@ const authResolver = {
       const newUser = new userModel({
         email: user.email,
         password: user.password,
+        name:user.name,
         createdEvent: [],
       });
 

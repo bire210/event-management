@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Form } from "../components/modals/form";
 import axios from "axios";
@@ -11,7 +10,7 @@ const Events = () => {
 
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
- 
+
   const getAllEvents = async () => {
     setLoading(true);
     try {
@@ -24,7 +23,7 @@ const Events = () => {
       const reqBody = {
         query: `
         query{
-   events{
+  getEvents{
        _id
        title
        desc
@@ -33,7 +32,7 @@ const Events = () => {
        creator{
            email
        }
-   }
+  }
 }
         `,
       };
@@ -44,7 +43,7 @@ const Events = () => {
       );
 
       if (data.data) {
-        setEvents(data.data.data.events);
+        setEvents(data.data.data.getEvents);
       }
 
       setLoading(false);
@@ -120,7 +119,7 @@ const Events = () => {
                     <td className="px-6 py-4">{event.price}</td>
                     <td className="px-6 py-4">{event.creator.email}</td>
                     <td className="px-6 py-4  bg-green-600 text-black rounded-lg text-center hover:cursor-pointer">
-                      <BookModal el={event}/>
+                      <BookModal el={event} />
                     </td>
                   </tr>
                 );

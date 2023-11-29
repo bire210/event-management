@@ -11,32 +11,37 @@ const tranformEvent = (event) => {
 };
 
 const eventResolver = {
-  events: async () => {
+  events: async (args, req) => {
     try {
+      // console.log("***********inside get all events");
       let allEvent = await eventModel.find().populate("creator");
+      // console.log(allEvent, "**************************");
       allEvent = allEvent.map((event) => {
         return tranformEvent(event);
       });
       return allEvent;
     } catch (error) {
+      console.log(error.message);
       throw new Error(error.message);
     }
   },
 
-  getEvents: async ({ id }, req) => {
+  getEvents: async (args, req) => {
     try {
       if (!req.isAuth) {
         throw new Error("Unauthenticated !");
       }
       let eventslist = await eventModel
-        .find({ creator: id })
+        .find({ creator: { $ne: req.user.userId } })
         .populate("creator");
+      // console.log("get all the event of a particular login user", eventslist);
 
       eventslist = eventslist.map((event) => {
         return tranformEvent(event);
       });
       return eventslist;
     } catch (error) {
+      console.log(error.message);
       throw new Error(error.message);
     }
   },

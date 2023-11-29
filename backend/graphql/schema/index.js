@@ -43,7 +43,7 @@ input EventInput {
     bookings:[Booking!]!
     eventById(id: ID!): Event
     login(user:UserInput):User
-    getEvents(id:ID!):[Event]
+    getEvents:[Event]
     getUserById(id:ID!):User!
   }
 

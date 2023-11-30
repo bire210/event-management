@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Form } from "../components/modals/form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { BookModal } from "../components/modals/BookModal";
@@ -67,9 +66,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex justify-end px-20 fixed right-0">
-        <Form onadd={setEvents} />
-      </div>
+    
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-20 px-20">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
